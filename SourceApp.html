@@ -1,0 +1,68 @@
+<html>
+<head>
+<title>Source App</title>
+</head>
+<body>
+<style>
+#myUrlinput{
+	width: 500px;
+    height: 50px;
+    font-family: Arial;
+    font-size: large;
+	padding-left:10px;
+}
+#searchBtn{
+	border: none;
+    width: 200px;
+    height: 50px;
+	background-color: #002663;
+    color: white;
+    font-size: large;
+}
+#container{
+	text-align: center;
+    margin-top: 300px;
+    border: 1px solid;
+	padding-top: 15px;
+    margin-left: 300px;
+    margin-right: 300px;
+	background-color: #b2bdd0;
+}
+</style>
+<div id="container">
+	
+	<input type="text" id="myUrlinput" placeholder="Enter the URL"></input>
+	<button onclick="getPhotos()" id="searchBtn">Submit</button>
+	<p id="result"></p>
+</div>
+</body>
+<script>
+		
+		function getPhotos(){
+			console.log("Inside getPhotos() function");
+			var maps_url=document.getElementById("myUrlinput").value;
+			console.log(maps_url);
+			var maps_json_data=executeMapsApi(maps_url);
+			console.log("End of main function");
+		}
+		
+		function executeMapsApi(resturl){
+			console.log("Inside executeMapsApi() function");
+			var xhr = new XMLHttpRequest();
+			xhr.open("GET", resturl, false);
+			xhr.send();
+			console.log(xhr.status);
+			console.log(xhr.statusText);
+			var response = xhr.responseText;
+			var var1 = response.replace(/</g , "&lt")	
+			var var2 = var1.replace(/>/g , "&gt")
+			document.getElementById("result").innerHTML="Page source is "+var2;
+			
+			
+		}
+		
+		function replaceAll(response, find, replace) {
+			return str.replace(new RegExp(find, '<'), replace);
+		}
+</script>
+</html>
