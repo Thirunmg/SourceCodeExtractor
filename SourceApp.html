@@ -27,6 +27,12 @@
     margin-left: 300px;
     margin-right: 300px;
 	background-color: #b2bdd0;
+	/*background-color:#FF9;*/
+	color:#555;
+}
+
+span{
+	background-color:#FF9;
 }
 </style>
 <div id="container">
@@ -36,33 +42,61 @@
 	<p id="result"></p>
 </div>
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script>
+		var selectText;
 		
 		function getPhotos(){
-			console.log("Inside getPhotos() function");
+			//console.log("Inside getPhotos() function");
 			var maps_url=document.getElementById("myUrlinput").value;
-			console.log(maps_url);
+			//console.log(maps_url);
 			var maps_json_data=executeMapsApi(maps_url);
-			console.log("End of main function");
+			//console.log("End of main function");
 		}
 		
 		function executeMapsApi(resturl){
-			console.log("Inside executeMapsApi() function");
+			//console.log("Inside executeMapsApi() function");
 			var xhr = new XMLHttpRequest();
 			xhr.open("GET", resturl, false);
 			xhr.send();
-			console.log(xhr.status);
-			console.log(xhr.statusText);
+			//console.log(xhr.status);
+			//console.log(xhr.statusText);
 			var response = xhr.responseText;
 			var var1 = response.replace(/</g , "&lt")	
 			var var2 = var1.replace(/>/g , "&gt")
-			document.getElementById("result").innerHTML="Page source is "+var2;
-			
-			
+			document.getElementById("result").innerHTML="Page source is "+var2;	
 		}
 		
 		function replaceAll(response, find, replace) {
 			return str.replace(new RegExp(find, '<'), replace);
+		}
+		
+		$(document).click(function(){
+				var s = window.getSelection();
+				s.modify('extend','backward','word');        
+				var b = s.toString();
+
+				s.modify('extend','forward','word');
+				var a = s.toString();
+				s.modify('move','forward','character');
+				selectText=b+a;
+				//console.log(selectText);
+				
+				if(selectText!="")
+					highlight();
+				else
+					console.log("Empty");
+		});
+	
+		function highlight(){
+			
+			var text=selectText;
+			var query = new RegExp("(\\b" + text + "\\b)", "gim");
+			var e = document.documentElement.innerHTML;
+			var enew = e.replace(/(<span>|<\/span>)/igm, "");
+			document.documentElement.innerHTML=enew;
+			var newe = enew.replace(query, "<span>$1</span>");
+			document.documentElement.innerHTML=newe;
 		}
 </script>
 </html>
